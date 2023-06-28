@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>RESULTS</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
+    {% load static %}
+    <script type="text/javascript" src="{% static "webapp/results.js" %}"> </script>
+    <link rel="stylesheet" href="{% static "webapp/results.css" %}">
+    <script>
+        $(document).ready(function () {
+            console.log("as")
+            {% for im in image %}
+            var image = "{{ im|safe }}"
+            image = image.slice(2, image.length - 1)
+            $('#img{{forloop.counter0}}').attr('src', $('#img{{forloop.counter0}}').attr('src') + image);
+            {% endfor %}
+            {% for im in segmented %}
+            var image = "{{ im|safe }}"
+            image = image.slice(2, image.length - 1)
+            $('#imgSeg{{forloop.counter0}}').attr('src', $('#imgSeg{{forloop.counter0}}').attr('src') + image);
+            {% endfor %}
+        });
+    </script>
+</head>
+
+<body>
+    <!-- Heading div -->
+    <div class="jumbotron text-center">
+        <h1 id="results" style="font-weight: bold; font-family: 'Times New Roman', Times, serif;"></h1>
+    </div>
+    <!-- This div is for the image name -->
+    <div class="container" id="image_name" style="display: None;">
+        <br><br>
+        <table border="5" align="center" class="table">
+            <tr>
+                <th align="center">ORIGINAL IMAGE</th>
+                <th align="center">SEGMENTED IMAGE</th>
+                <th align="center">ICH DETECTED</th>
+            </tr>
+            <tbody>
+                {% for ich in ICH %}
+
+                <tr>                        
+                        {% for i in n %}
+                        {% if forloop.parentloop.counter == forloop.counter %}
+                        <td align="center">
+                            <img src='data:image/png;base64, ' alt="" id='img{{i}}' style="height: 256px;width: 256px;">
+                        </td>
+                        <td align="center">
+                        <img src='data:image/png;base64, ' alt="" id='imgSeg{{i}}'>
+                        </td>
+                        <td>
+                            <p><b>{{ ich }}</b></p>
+                        </td>
+                        {% endif %}
+                        {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <!-- <div class="container" id="hemorrhage_image" style="display: None;">
+    <div class="row">
+            <div class="column">
+                <img src="Selection_013.png" alt="IMAGE" style="width: 100%;border-color: black;">
+            </div>
+            <div class="column">
+                <img src="Selection_014.png" alt="SEGMENTED IMAGE" style="width: 100%; border-color: black;">
+            </div>
+        </div>
+    </div> -->
+</body>
+
+</html>
